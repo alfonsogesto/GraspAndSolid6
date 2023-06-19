@@ -13,7 +13,7 @@ namespace Full_GRASP_And_SOLID
         private TimerClient client;
 
         private Timer timer;
-
+        
         public void Register(int timeOut, TimerClient client)
         {
             this.client = client;

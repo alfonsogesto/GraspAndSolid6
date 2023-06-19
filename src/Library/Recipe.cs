@@ -1,9 +1,3 @@
-//-------------------------------------------------------------------------
-// <copyright file="Recipe.cs" company="Universidad Católica del Uruguay">
-// Copyright (c) Programación II. Derechos reservados.
-// </copyright>
-//-------------------------------------------------------------------------
-
 using System;
 using System.Collections.Generic;
 
@@ -15,6 +9,19 @@ namespace Full_GRASP_And_SOLID
         private IList<BaseStep> steps = new List<BaseStep>();
 
         public Product FinalProduct { get; set; }
+
+        // Agregado por ISP
+        private CountdownTimer timer;
+        // Agregado por ISP
+        private TimerAdapter timerClient;
+
+        // Agregado por Expert
+        public bool Cooked { get;  set; } 
+
+        public Recipe()
+        {
+            this.Cooked = false;
+        }
 
         // Agregado por Creator
         public void AddStep(Product input, double quantity, Equipment equipment, int time)
@@ -61,6 +68,31 @@ namespace Full_GRASP_And_SOLID
             }
 
             return result;
+        }
+        // Agregado por Expert
+        public int GetCookTime()
+        {
+            int result = 0;
+
+            foreach (BaseStep step in this.steps)
+            {
+                result = result + step.Time;
+            }
+
+            return result;
+        }
+        // Agregado por Expert
+        public void IsCooked()
+        {
+            this.Cooked = true;
+        }
+
+        // Agregado por ISP
+        public void Cook()
+        {
+            this.timer = new CountdownTimer();
+            this.timerClient = new TimerAdapter(this);
+            this.timer.Register(this.GetCookTime(), this.timerClient);
         }
     }
 }
